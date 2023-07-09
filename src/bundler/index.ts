@@ -1,5 +1,9 @@
 import * as esbuild from "esbuild-wasm";
-import { esbuildUnpkgPathPlugin } from "./plugins";
+import {
+  esbuildUnpkgLoadPlugin,
+  esbuildUnpkgResolvePlugin,
+  esbuildCssInjectPlugin,
+} from "./plugins";
 
 export const initService = async () => {
   try {
@@ -13,18 +17,22 @@ export const initService = async () => {
   }
 };
 
-export const build = async () => {
+export const build = async (code: string) => {
   return await esbuild.build({
     entryPoints: ["index.js"],
     write: false,
     bundle: true,
-    plugins: [esbuildUnpkgPathPlugin]
+    plugins: [
+      esbuildCssInjectPlugin,
+      esbuildUnpkgLoadPlugin(code),
+      esbuildUnpkgResolvePlugin,
+    ],
   });
 };
 
 export const transform = (input: string) => {
-    return esbuild.transform(input, {
-        loader: 'tsx',
-        target: "es2015",
-    })
-}
+  return esbuild.transform(input, {
+    loader: "jsx",
+    target: "es2015",
+  });
+};

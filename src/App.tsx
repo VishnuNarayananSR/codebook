@@ -9,8 +9,8 @@ const App: React.FC = () => {
   }, []);
   const onClick = async () => {
     try {
-      const bundleCode = await build();
-      setCode(bundleCode.outputFiles[0].text);
+      const bundleCode = await build(input);
+      setCode(bundleCode.outputFiles?.[0].text ?? "");
     } catch (err) {
       if (err instanceof Error) setCode(err.message);
     }
