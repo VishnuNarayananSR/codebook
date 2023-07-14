@@ -27,6 +27,7 @@ export const build = async (code: string) => {
       esbuildUnpkgLoadPlugin(code),
       esbuildUnpkgResolvePlugin,
     ],
+    define: { "process.env.NODE_ENV": "'production'", global: "window" },
   });
 };
 
